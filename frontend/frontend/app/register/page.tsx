@@ -1,15 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { saveTokens } from '@/lib/auth';
 
+interface RegisterErrors {
+  email?: string[] | string;
+  password?: string[] | string;
+  general?: string[] | string;
+  [key: string]: string[] | string | undefined;
+}
+
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<RegisterErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const router = useRouter();
@@ -20,7 +27,7 @@ export default function RegisterPage() {
     }
   }, [shouldRedirect, router]);
 
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     // Clear previous errors
@@ -69,14 +76,14 @@ export default function RegisterPage() {
     } catch (err) {
       console.error('Registration error:', err);
       // Set a general error
-      setErrors({ general: [err.message || 'Something went wrong during registration'] });
+      setErrors({ general: [(err as Error).message || 'Something went wrong during registration'] });
     } finally {
       setIsLoading(false);
     }
   };
 
   // Helper function to render field-specific errors
-  const renderFieldErrors = (fieldName) => {
+  const renderFieldErrors = (fieldName: string) => {
     if (!errors[fieldName]) return null;
     
     return (
@@ -84,7 +91,7 @@ export default function RegisterPage() {
         <p className="font-medium text-[#8a6d3b] mb-1">An error occured due to the {fieldName} entered:</p>
         <ul className="list-disc list-inside pl-2 text-[#8a6d3b]">
           {Array.isArray(errors[fieldName]) 
-            ? errors[fieldName].map((error, index) => (
+            ? (errors[fieldName] as string[]).map((error, index) => (
                 <li key={index} className="text-sm">{error}</li>
               ))
             : <li className="text-sm">{String(errors[fieldName])}</li>

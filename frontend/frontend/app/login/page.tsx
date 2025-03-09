@@ -1,15 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { saveTokens } from '@/lib/auth';
 
+interface LoginErrors {
+  email?: string[] | string;
+  password?: string[] | string;
+  general?: string[] | string;
+  [key: string]: string[] | string | undefined;
+}
+
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<LoginErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const router = useRouter();
@@ -20,7 +27,7 @@ export default function LoginPage() {
     }
   }, [shouldRedirect, router]);
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setErrors({});
@@ -65,14 +72,14 @@ export default function LoginPage() {
       }
     } catch (err) {
       console.error('Login error:', err);
-      setErrors({ general: [err.message || 'Something went wrong during login'] });
+      setErrors({ general: [(err as Error).message || 'Something went wrong during login'] });
     } finally {
       setIsLoading(false);
     }
   };
 
   // Helper function to render field-specific errors
-  const renderFieldErrors = (fieldName) => {
+  const renderFieldErrors = (fieldName: string) => {
     if (!errors[fieldName]) return null;
     
     return (
@@ -80,7 +87,7 @@ export default function LoginPage() {
         <p className="font-medium text-[#8a6d3b] mb-1">{fieldName}:</p>
         <ul className="list-disc list-inside pl-2 text-[#8a6d3b]">
           {Array.isArray(errors[fieldName]) 
-            ? errors[fieldName].map((error, index) => (
+            ? (errors[fieldName] as string[]).map((error, index) => (
                 <li key={index} className="text-sm">{error}</li>
               ))
             : <li className="text-sm">{String(errors[fieldName])}</li>
