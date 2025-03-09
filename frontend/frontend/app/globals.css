@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  --app-background: #FAF1E3;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+}
+
+@theme inline {
+  --color-background: var(--app-background);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Keep the same colors for dark mode for consistency */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --app-background: #FAF1E3;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+  }
+}
+
+body {
+  background: var(--app-background);
+  color: var(--text-primary);
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  min-height: 100vh;
+}
+
+html,
+body {
+  height: 100%;
+}
