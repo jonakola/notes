@@ -1,7 +1,0 @@
-FROM python:3.13.2-bookworm
-
-RUN apt-get update && apt-get upgra
-
-RUN pip install --upgrade pip
-
-RUN python -m pip install Django
