@@ -24,7 +24,7 @@ export default function CategoryList({ activeCategory, onCategorySelect }: Categ
         setCategories(data);
         
         // Calculate total notes for "All Notes" count
-        const total = data.reduce((sum: number, category: Category) => sum + category.notes_count, 0);
+        const total = data?.reduce((sum: number, category: Category) => sum + category.notes_count, 0);
         setTotalNotes(total);
         
         setLoading(false);

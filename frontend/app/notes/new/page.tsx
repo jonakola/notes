@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Category } from '@/types';
 import CustomCategorySelect from '@/components/CustomCategorySelect';
+import ConversationButton from '@/components/ConversationButton';
 
 
 export default function CreateNotePage() {
@@ -21,6 +22,12 @@ export default function CreateNotePage() {
   // Get the selected category object
   const selectedCategory = categories.find(cat => cat.id === categoryId);
   const categoryColor = selectedCategory?.colour || '#F8D3B9';
+
+  const handleSummaryReceived = (summary: string) => {
+    setContent(prevContent => {
+      return summary;
+    });
+  };
   
   // Fetch categories
   useEffect(() => {
@@ -165,7 +172,7 @@ return (
         >
           {/* Last edited date */}
           <div className="text-right text-sm mb-4 text-gray-700">
-            Last Edited: {formatDate()}
+            Last edited: {formatDate()}
           </div>
           
           {/* Note title */}
@@ -191,6 +198,9 @@ return (
               placeholder="Pour your heart out..."
               rows={8}
             />
+            <div className="absolute bottom-4 right-4 group">
+            <ConversationButton onSummaryReceived={handleSummaryReceived} />
+            </div>
           </div>
         </div>
         

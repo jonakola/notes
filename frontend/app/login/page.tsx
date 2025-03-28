@@ -108,7 +108,7 @@ export default function LoginPage() {
             style={{ objectFit: 'contain' }}
           />
         </div>
-        <h1 className="text-4xl font-bold text-[#8a6d3b]">Yay, You're Back!</h1>
+        <h1 className="text-4xl font-bold text-[#8a6d3b]">Hi, You're Back!</h1>
       </div>
       
       <div className="w-full max-w-md px-4">
